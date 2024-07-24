@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descent - Bate Papo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="icon.png" type="image/png">
+</head>
+
+<body>
+    <div class="menu">
+        <img src="./icon.png" alt="icone">
+    </div>
+    <div class="principal">
+
+        <div class="principal-barra">
+            <input type="text" placeholder="Escreva uma mensagem...">
+            <button onclick="electron.Minimizar()"> - </button>
+            <button onclick="electron.Maximizar()"> o </button>
+            <button onclick="electron.Fechar()"> x </button>
+        </div>
+
+        <div class="principal-conversa">
+            <div class="conversa">
+                <span> Voluptatibus </span>
+                Laudantium, expedita sit ipsam consequuntur dignissimos.
+            </div>
+        </div>
+    </div>
+    <script>
+        const entradaConversa = document.querySelector("input")
+        const campoConversa = document.querySelector("div.principal-conversa")
+        entradaConversa.addEventListener("keypress", function (evento) {
+            if (evento.key === "Enter") {
+                evento.preventDefault()
+                electron.EnviarMensagem(evento.target.value)
+                evento.target.value = null
+            }
+        })
+
+        setInterval(function () {
+            electron.ReceberMensagem()
+                .then(function (resultados) {
+                    campoConversa.innerHTML = null
+                    for (let resultado of resultados) {
+                        const conversa = document.createElement("div")
+                        conversa.setAttribute("class", "conversa")
+                        const nome = document.createElement("span")
+                        nome.innerHTML = resultado.nome
+                        conversa.appendChild(nome)
+                        conversa.append(" ")
+                        conversa.append(resultado.mensagem)
+                        campoConversa.appendChild(conversa)
+                    }
+                })
+        }, 1000)
+
+    </script>
+</body>
+
+</html>
